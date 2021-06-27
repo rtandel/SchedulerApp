@@ -1,41 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function LandingPage() {
+  const [days, setDays] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
-    const [days, setDays] = useState([]);
-    const [currentDay, setCurrentDay] = useState('');
 
 
-    function dateSelection(e) {
-       console.log(e.target.value);
-       setCurrentDay(e.target.value)
+
+
+  function addDay(e) {
+    e.preventDefault()
+    console.log(selectedDate)
+    if (days.indexOf(selectedDate) > -1) {
+        return;
     }
+    let array = [...days];
+    array.push(selectedDate);
+    console.log(array);
+    setDays([...array]);
+  }
 
-    function addDay(e) {
-        e.preventDefault();
-        let str = currentDay;
-        const stArray = str.split('/');
-        if (stArray[0].length != 2 || stArray[1].length != 2 || stArray[2].length != 4) {
-            return
-        }
-        let array = [...days]
-        if (array.indexOf(str) > -1) {
-            return;
-        }
-        array.push(str);
-        console.log(array);
-        setDays([...array]);
-    }
+  return (
+    <div>
+      {days.length == 0 ? <h1>No days entered yet</h1> : <h1>Non empty</h1>}
 
-    return (
-        <div>
-            {
-                days.length == 0 ? <h1>No days entered yet</h1> : <h1>Non empty</h1> 
-            }
-            <form onSubmit={addDay}>
-                <input name="date" type="text" placeholder="DD/MM/YYYY" onChange={dateSelection}/>
-                <input type="submit" value="submit" />
-            </form>
-        </div>
-    )
+      <form onSubmit={addDay}>
+        <DatePicker selected={selectedDate} onChange={(date) => setSelectedDate(date)} />
+        <input type="submit" value="submit" />
+      </form>
+    </div>
+  );
 }
